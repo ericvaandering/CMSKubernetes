@@ -37,7 +37,7 @@ ENV container docker
 ADD etc/httpd/conf.d/rucio.conf /etc/httpd/conf.d/
 ADD etc/httpd/conf/httpd.conf /etc/httpd/conf/
 ADD etc/supervisord.d/rucio.ini /etc/supervisord.d
-ADD opt/rucio/etc/alembic.ini opt/rucio/etc/rucio.cfg /opt/rucio/etc/
+ADD opt/rucio/etc/alembic.ini opt/rucio/etc/rucio.cfg opt/rucio/etc/gacl /opt/rucio/etc/
 # FIXME: What to do about /opt/rucio/etc/gacl?
 
 RUN cp /etc/grid-security/certificates/CERN-GridCA.pem /opt/rucio/etc/web/ca.pem
@@ -53,3 +53,4 @@ RUN crontab /opt/rucio/tools/delegate_fts_proxy.cron
 
 RUN systemctl enable httpd.service
 RUN systemctl enable supervisord.service
+
