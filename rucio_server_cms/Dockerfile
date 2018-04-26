@@ -38,7 +38,7 @@ ADD etc/httpd/conf.d/rucio.conf /etc/httpd/conf.d/
 ADD etc/httpd/conf/httpd.conf /etc/httpd/conf/
 ADD etc/supervisord.d/rucio.ini /etc/supervisord.d
 ADD opt/rucio/etc/alembic.ini opt/rucio/etc/rucio.cfg opt/rucio/etc/gacl /opt/rucio/etc/
-# FIXME: What to do about /opt/rucio/etc/gacl?
+ADD opt/rucio/etc/web/aliases-py27.conf /opt/rucio/etc/web/
 
 RUN cp /etc/grid-security/certificates/CERN-GridCA.pem /opt/rucio/etc/web/ca.pem
 
