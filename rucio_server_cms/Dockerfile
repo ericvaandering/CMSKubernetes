@@ -36,8 +36,8 @@ ENV container docker
 
 ADD etc/httpd/conf.d/rucio.conf /etc/httpd/conf.d/
 ADD etc/httpd/conf/httpd.conf /etc/httpd/conf/
-ADD etc/supervisord.d/rucio.ini /etc/supervisord.d
-ADD opt/rucio/etc/alembic.ini opt/rucio/etc/rucio.cfg opt/rucio/etc/gacl /opt/rucio/etc/
+ADD etc/supervisord.d/rucio.ini /etc/supervisord.d/
+ADD opt/rucio/etc/* /opt/rucio/etc/
 ADD opt/rucio/etc/web/aliases-py27.conf /opt/rucio/etc/web/
 
 RUN cp /etc/grid-security/certificates/CERN-GridCA.pem /opt/rucio/etc/web/ca.pem
@@ -48,7 +48,7 @@ ADD OpenSSL.tar /usr/lib64/python2.7/site-packages/
 
 # Setup cron and start services
 
-ADD opt/rucio/tools/delegate_fts_proxy.cron /opt/rucio/tools
+ADD opt/rucio/tools/* /opt/rucio/tools/
 RUN crontab /opt/rucio/tools/delegate_fts_proxy.cron
 
 RUN systemctl enable httpd.service
