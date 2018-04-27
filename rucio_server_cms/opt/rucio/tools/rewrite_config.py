@@ -19,7 +19,7 @@ config.read(FILENAME)
 
 for section, option in REPLACE:
     value = config.get(section, option)
-    config.set(section, option, passw)
+    config.set(section, option, value)
 
 with open(FILENAME, 'wb') as configfile:
     config.write(configfile)
