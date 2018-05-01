@@ -7,6 +7,12 @@ spec:
   containers:
   - name: rucio-server-cms
     image: ericvaandering/rucio_server_cms
+    env:
+      - name: DBURL
+        valueFrom:
+          secretKeyRef:
+            name: dburl
+            key: DBURL.txt
     volumeMounts:
     - name: hostkey
       mountPath: /etc/grid-security/hostkey.pem
