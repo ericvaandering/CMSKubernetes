@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rucio-server-cms
+spec:
+  containers:
+  - name: rucio-server-cms
+    image: ericvaandering/rucio_server_cms
+...
