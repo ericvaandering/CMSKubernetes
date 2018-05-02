@@ -1,32 +1,80 @@
 ---
+kind: Service
 apiVersion: v1
-kind: Pod
 metadata:
-  name: rucio-server-cms
+  name: rucio-all
 spec:
-  containers:
-  - name: rucio-server-cms
-    image: ericvaandering/rucio_server_cms
-    env:
-      - name: DBURL
-        valueFrom:
-          secretKeyRef:
-            name: dburl
-            key: DBURL.txt
-    volumeMounts:
-    - name: hostkey
-      mountPath: /etc/grid-security/hostkey.pem
-      readOnly: true      
-    - name: hostcert
-      mountPath: /etc/grid-security/hostcert.pem
-      readOnly: true      
-  volumes:
-  - name: hostkey
-    hostPath:
-      path: /etc/grid-security/hostkey.pem
-      type: File
-  - name: hostcert
-    hostPath:
-      path: /etc/grid-security/hostcert.pem
-      type: File
+  selector:
+    app: rucio-mono
+  ports:
+  - name: rucio1
+    protocol: TCP
+    port: 443
+    targetPort: 443
+  - name: rucio2
+    protocol: TCP
+    port: 8443
+    targetPort: 8443
+  - name: rucio3
+    protocol: TCP
+    port: 80
+    targetPort: 80
+  - name: rucio4
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  - name: rucio5
+    protocol: TCP
+    port: 8088
+    targetPort: 8088
+...
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rucio-server-deployment
+  labels:
+    app: rucio-server-cms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rucio-server-cms
+  template:
+    metadata:
+      labels:
+        app: rucio-server-cms
+    spec:
+      containers:
+      - name: rucio-server-cms
+        image: ericvaandering/rucio_server_cms
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+        - containerPort: 8443
+        - containerPort: 8080
+        - containerPort: 8088
+        env:
+        - name: DBURL
+          valueFrom:
+            secretKeyRef:
+              name: dburl
+              key: DBURL.txt
+        volumeMounts:
+        - name: hostkey
+          mountPath: /etc/grid-security/hostkey.pem
+          readOnly: true
+        - name: hostcert
+          mountPath: /etc/grid-security/hostcert.pem
+          readOnly: true
+      volumes:
+      - name: hostkey
+        hostPath:
+          path: /etc/grid-security/hostkey.pem
+          type: File
+      - name: hostcert
+        hostPath:
+          path: /etc/grid-security/hostcert.pem
+          type: File
 ...
