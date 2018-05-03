@@ -6,6 +6,8 @@ metadata:
 spec:
   selector:
     app: rucio-mono
+
+# All the ports that are open in the container. Label correctly as we figure out what they are
   ports:
   - name: rucio1
     protocol: TCP
@@ -46,6 +48,8 @@ spec:
       labels:
         app: rucio-server-cms
     spec:
+
+    # Main container containing all the Rucio stuff
       containers:
       - name: rucio-server-cms
         image: ericvaandering/rucio_server_cms
@@ -55,12 +59,14 @@ spec:
         - containerPort: 8443
         - containerPort: 8080
         - containerPort: 8088
+        # Environment variable wtih the DB connect string (Oracle, Postgres, etc)
         env:
         - name: DBURL
           valueFrom:
             secretKeyRef:
               name: dburl
               key: DBURL.txt
+        # Openstack gives us the cert and key for the host, so mount them
         volumeMounts:
         - name: hostkey
           mountPath: /etc/grid-security/hostkey.pem
@@ -68,6 +74,8 @@ spec:
         - name: hostcert
           mountPath: /etc/grid-security/hostcert.pem
           readOnly: true
+
+      # Openstack gives us the cert and key for the host, so mount them
       volumes:
       - name: hostkey
         hostPath:
