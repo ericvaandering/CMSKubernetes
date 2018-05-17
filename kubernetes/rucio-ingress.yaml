@@ -35,3 +35,7 @@ spec:
         backend:
           serviceName: rucio-server-cms
           servicePort: 8088
+      - path: /rucio8
+        backend:
+          serviceName: rucio-server-cms
+          servicePort: 8080
