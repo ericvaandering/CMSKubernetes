@@ -1,6 +1,6 @@
 # rucio-traefik.toml
 #defaultEntryPoints = ["http","https"]
-defaultEntryPoints = ["http"]
+defaultEntryPoints = ["http","https"]
 
 [entryPoints]
   [entryPoints.http]
@@ -9,12 +9,12 @@ defaultEntryPoints = ["http"]
 #  address = ":8088"
 #   [entryPoints.http.redirect]
 #     entryPoint = "https"
-#  [entryPoints.https]
-#  address = ":443"
-#    [entryPoints.https.tls]
-#      [[entryPoints.https.tls.certificates]]
-#      CertFile = "/ssl/server.crt"
-#      KeyFile = "/ssl/server.key"
+  [entryPoints.https]
+  address = ":443"
+    [entryPoints.https.tls]
+      [[entryPoints.https.tls.certificates]]
+      CertFile = "/ssl/server.crt"
+      KeyFile = "/ssl/server.key"
   [entryPoints.ping]
     address = ":8082"
 
