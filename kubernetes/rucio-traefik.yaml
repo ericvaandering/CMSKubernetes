@@ -30,6 +30,12 @@ spec:
       - image: gitlab-registry.cern.ch/cloud/atomic-system-containers/traefik
         name: ingress-traefik-backend
         volumeMounts:
+        - name: hostkey
+          mountPath: /etc/grid-security/hostkey.pem
+          readOnly: true
+        - name: hostcert
+          mountPath: /etc/grid-security/hostcert.pem
+          readOnly: true
 #        - mountPath: "/ssl"
 #          name: "ssl"
 #          readOnly: true
@@ -48,6 +54,18 @@ spec:
         - -d
         - --configfile=config/rucio-traefik.toml
         - --logLevel=INFO
+
+      # Openstack gives us the cert and key for the host, so mount them
+      volumes:
+      - name: hostkey
+        hostPath:
+          path: /etc/grid-security/hostkey.pem
+          type: File
+      - name: hostcert
+        hostPath:
+          path: /etc/grid-security/hostcert.pem
+          type: File
+
       nodeSelector:
         role: ingress
 ...
