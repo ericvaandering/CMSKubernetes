@@ -2,6 +2,8 @@
 
 
 kubectl create secret generic dburl --from-file=DBURL.txt
+kubectl delete secret globus
+kubectl create secret generic globus --from-file=${HOME}/.globus/usercert.pem --from-file=${HOME}/.globus/userkey.pem
 
 kubectl replace --force -f rucio_server_cms.yaml
 

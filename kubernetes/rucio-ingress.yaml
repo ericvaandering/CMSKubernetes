@@ -27,10 +27,6 @@ spec:
   - host: "ewvk8s-ggimapr6rucs-minion-0.cern.ch"
     http:
       paths:
-      - path: /ng
-        backend:
-          serviceName: my-nginx
-          servicePort: 80
       - path: /supervisord
         backend:
           serviceName: rucio-server-cms

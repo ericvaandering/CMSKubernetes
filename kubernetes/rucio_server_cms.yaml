@@ -13,6 +13,7 @@ spec:
     protocol: TCP
     port: 443
     targetPort: 443
+    nodePort: 30443
   - name: rucio2
     protocol: TCP
     port: 8443
@@ -25,10 +26,13 @@ spec:
     protocol: TCP
     port: 8080
     targetPort: 8080
+    nodePort: 30880
   - name: supervisord
     protocol: TCP
     port: 8088
     targetPort: 8088
+    nodePort: 30888
+  type: NodePort
 ...
 
 ---
@@ -46,12 +50,14 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
+    nodePort: 31080
   - port: 8125
     name: statsd
     protocol: UDP
   - port: 8126
     name: admin
     protocol: TCP
+  type: NodePort
 ...
 
 ---
@@ -121,6 +127,7 @@ metadata:
     run: rucio-graphite
 spec:
   replicas: 1
+
   selector:
     matchLabels:
       run: rucio-graphite
@@ -129,6 +136,8 @@ spec:
       labels:
         run: rucio-graphite
     spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
 
     # Main container containing all the Rucio stuff
       containers:
@@ -148,4 +157,39 @@ spec:
           name: statsd
         - containerPort: 8126
           name: admin
+...
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rucio-client
+  labels:
+    run: rucio-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: rucio-client
+  template:
+    metadata:
+      labels:
+        run: rucio-client
+    spec:
+
+    # A client for testing
+      containers:
+      - name: rucio-client
+        image: cmssw/rucio_client
+        securityContext:
+          privileged: false
+        volumeMounts:
+        - name: globus
+          mountPath: /root/.globus/
+          readOnly: true
+      volumes:
+      - name: globus
+        secret:
+          secretName: globus
+          defaultMode: 256
 ...
