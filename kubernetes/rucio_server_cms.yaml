@@ -105,6 +105,8 @@ spec:
         - name: hostcert
           mountPath: /etc/grid-security/hostcert.pem
           readOnly: true
+        - name: rucio-logs
+          mountPath: /var/log/rucio
 
       # Openstack gives us the cert and key for the host, so mount them
       volumes:
@@ -116,6 +118,10 @@ spec:
         hostPath:
           path: /etc/grid-security/hostcert.pem
           type: File
+      - name: rucio-logs
+        hostPath:
+          path: /mnt/data/log/rucio
+          type: Directory
 ...
 
 ---
