@@ -121,7 +121,7 @@ spec:
       - name: rucio-logs
         hostPath:
           path: /mnt/data/log/rucio
-          type: Directory
+          type: DirectoryOrCreate
 ...
 
 ---
