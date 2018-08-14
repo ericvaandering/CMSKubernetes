@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 
+export RUCIO_GIT=$HOME/rucio
+pushd $RUCIO_GIT; git pull; popd
+
+export RUCIO_KUB=$RUCIO_GIT/etc/docker/kubernetes
 
 kubectl create secret generic dburl --from-file=DBURL.txt
 
-kubectl replace --force -f rucio_server_cms.yaml
+# Label all the nodes with ingress
+
+kubectl get pods -o json | jq '.items[] | .spec.nodeName' -r | sort|uniq | xargs -I % kubectl label node --overwrite % role=ingress
+
+kubectl apply -f rucio-server.yaml
 
 
-kubectl -n kube-system delete configmap traefik-conf
-kubectl -n kube-system create configmap traefik-conf --from-file=rucio-traefik.toml
+exit
 
-kubectl delete daemonset ingress-traefik -n kube-system
-kubectl delete service ingress-traefik -n kube-system
-kubectl delete -f rucio-ingress.yaml
-
-kubectl apply -f rucio-traefik.yaml
-kubectl apply -f rucio-ingress.yaml
 
 

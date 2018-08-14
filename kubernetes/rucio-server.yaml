@@ -1,0 +1,72 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: server
+  labels:
+    app: server
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: server
+    spec:
+      containers:
+        - name: server
+          image: cmssw/rucio_server_cms
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 3
+          env:
+            - name: RUCIO_ENABLE_SSL
+              value: "False"
+            - name: RUCIO_LOG_FORMAT
+              value: '[%{%Y-%m-%d %H:%M:%S}t]\t%v\t%h\t%{X-Forwarded-For}i\t%{X-Rucio-RequestId}i\t%>s\t%I\t%B\t%D\t\"%r\"\t\"%{X-Rucio-Auth-Token}i\"\t\"%{User-Agent}i\"\t%{X-Rucio-Script}i'
+            - name: DBURL
+              valueFrom:
+                secretKeyRef:
+                  name: dburl
+                  key: DBURL.txt
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: server
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: server
+  selector:
+    app: server
+---
+# This is a modified configuration sent in Slack to me by Thomas
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: server-front
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/frontend-entry-points: http,https
+    traefik.ingress.kubernetes.io/redirect-entry-point: https
+spec:
+  rules:
+    - host: "*.cern.ch"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: server
+              servicePort: 80
+  tls:
+    - secretName: tls-secret
+
