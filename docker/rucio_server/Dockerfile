@@ -11,11 +11,6 @@
 
 FROM rucio/rucio-systemd-cc7
 
-RUN yum -y update && \
-    yum install -y fts-client globus-proxy-utils voms-clients-cpp && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-
 ENV container docker
 
 RUN pip install --upgrade pip
@@ -23,6 +18,11 @@ RUN pip install --upgrade setuptools
 RUN pip install rucio
 
 # Needs to be here because of meld3 conflict
+RUN yum -y update && \
+    yum install -y fts-client globus-proxy-utils voms-clients-cpp && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+
 RUN yum install -y less supervisor cronie && \
     yum clean all && \
     rm -rf /var/cache/yum
