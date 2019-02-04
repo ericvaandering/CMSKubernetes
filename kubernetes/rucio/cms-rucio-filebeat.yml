@@ -1,0 +1,8 @@
+config:
+  output:
+    file.enabled:
+      false
+    logstash:
+      # Remove all the exraneous stuff when they 
+      hosts: ['logstash-service.kube-system.svc.cluster.local:5044']
+      

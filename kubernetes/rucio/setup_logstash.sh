@@ -8,7 +8,5 @@ kubectl create secret generic  cern-bundle --from-file=/etc/pki/tls/certs/CERN-b
 # Start logstash and then the parts of filebeat
 
 kubectl apply -f logstash.yaml
+helm install --name filebeat-testbed --values cms-rucio-filebeat.yml  stable/filebeat
 
-kubectl apply -f filebeat-config.yaml
-kubectl apply -f filebeat-clusterrole.yaml
-kubectl apply -f filebeat-ds.yaml
