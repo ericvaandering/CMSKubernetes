@@ -1,5 +1,8 @@
 persistence:
   enabled: false
+service:
+  type: NodePort
+
 filters:
   main: |-
     filter {
@@ -67,7 +70,6 @@ filters:
                      }
       }
     }
-  }
 
 
 outputs:
@@ -81,4 +83,3 @@ outputs:
         format => "json"
       }
     }
-  }
