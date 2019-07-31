@@ -8,7 +8,7 @@ data:
     main:
         pool: 3
         sleep: 60
-        verbosity: SUMMARY
+        verbosity: NOTICE
         run:
           "for:13000"   # True YAML does not work
     default:
