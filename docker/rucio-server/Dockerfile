@@ -21,6 +21,7 @@ RUN yum -y install ca-policy-egi-core
 RUN yum -y install ca-certificates.noarch fetch-crl cronie psmisc
 
 ADD cms-entrypoint.sh /
+ADD rucio.conf.j2 /tmp/
 
 RUN echo "32 */6 * * * root ! /usr/sbin/fetch-crl -q -r 360 ; killall -HUP httpd" > /etc/cron.d/fetch-crl-docker
 
