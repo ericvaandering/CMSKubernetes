@@ -18,4 +18,4 @@ RUN chmod 755 /usr/lib/python2.7/site-packages/cmstfc.py
 # Add another CA
 
 RUN yum-config-manager --add-repo http://linuxsoft.cern.ch/mirror/repository.egi.eu/sw/production/cas/1/current/
-RUN yum install ca_policy_igtf-classic -y
+RUN yum install --nogpgcheck ca_policy_igtf-classic -y
