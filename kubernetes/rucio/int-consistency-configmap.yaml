@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: consistency-config
+data:
+  config.yaml: |+
+    rses: 
+        "*": # default
+                partitions:     5
+                scanner:
+                        recursion:      3
+                        workers:        5
+                        timeout:        120
+                dbdump:
+                        lfn_root:   /
+                        lfn_to_path:
+                                -       path:   "^/+(.*)"
+                                        out:    "/$1"
+
+        T2_US_Purdue_Test: 
+                scanner: 
+                        server: xrootd.rcac.purdue.edu
+                        root:   /store/test/rucio/int/cms
+        T2_US_Purdue_Temp: 
+                scanner: 
+                        server: xrootd.rcac.purdue.edu
+                        root:   /store/test/rucio/cms
+        FNAL_dCache:
+                scanner:
+                        server: cmsdcadisk.fnal.gov
+                        root: /dcache/uscmsdisk/store/mc
+                        recursion:      2
+                        workers:        5
+                        timeout:        30
+                        remove_prefix: /dcache/uscmsdisk
+
+
