@@ -9,7 +9,7 @@
 export DAEMON_NAME=cms-ruciod-${INSTANCE}
 export SERVER_NAME=cms-rucio-${INSTANCE}
 export UI_NAME=cms-webui-${INSTANCE}
-
+export GLOBUS_NAME=cms-globus-${INSTANCE}
 
 echo
 echo "When prompted, enter the password used to encrypt the HOST P12 file"
@@ -72,6 +72,10 @@ kubectl create secret generic ${DAEMON_NAME}-fts-key --from-file=$ROBOTKEY
 kubectl create secret generic ${DAEMON_NAME}-hermes-cert --from-file=$ROBOTCERT
 kubectl create secret generic ${DAEMON_NAME}-hermes-key --from-file=$ROBOTKEY
 kubectl create secret generic ${DAEMON_NAME}-rucio-ca-bundle --from-file=/etc/pki/tls/certs/CERN-bundle.pem
+
+# Secrets for Globus
+kubectl create secret generic ${GLOBUS_NAME}-rucio-ca-bundle --from-file=/etc/pki/tls/certs/CERN-bundle.pem
+kubectl create secret generic ${GLOBUS_NAME}-rucio-x509up  --from-file=/etc/pki/tls/certs/CERN-bundle.pem # This is a dummy, but needed for container to start
 
 # WebUI needs whole bundle as ca.pem. Keep this at end since we just over-wrote ca.pem
 
