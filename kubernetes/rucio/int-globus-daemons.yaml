@@ -10,7 +10,7 @@ tracerKronosCount: 0
 transmogrifierCount: 0
 undertakerCount: 0
 reaperCount: 0
-reaper2Count: 0
+reaper2Count: 1
 minosCount: 0
 necromancerCount: 0
 
@@ -30,8 +30,8 @@ podLabels:
 
 config:
     common:
-        #loglevel: "DEBUG"
-        loglevel: "INFO"
+        loglevel: "DEBUG"
+        #loglevel: "INFO"
     conveyor:
       use_preparer: "True"
       scheme: "globus"
@@ -47,3 +47,9 @@ conveyorTransferSubmitter:
   bulk: 50
   groupBulk: 50
 
+reaper2:
+  includeRses: "rse=T3_US_Theta"
+  scheme: "globus"
+  chunk_size: 1
+  greedy: 1
+  threads: 1
